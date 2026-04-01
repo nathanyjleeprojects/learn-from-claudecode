@@ -16,9 +16,16 @@ An `:assess` session must have been completed in this conversation with at least
 
 ## Step 1: Locate Assess Results
 
-1. Find the assess output in the conversation history
-2. Identify which gaps the user selected for implementation
-3. List all selected improvements with their status:
+**Primary**: Read `.what-would-cc-do/assess-results.json` from the project root.
+
+1. Check if `.what-would-cc-do/assess-results.json` exists (use Glob or Read)
+2. If the file exists:
+   - Parse the JSON and extract all gaps where `selected: true`
+   - Use the structured data directly — no need to search conversation history
+3. If the file does NOT exist (fallback for backwards compatibility):
+   - Find the assess output in the conversation history
+   - Identify which gaps the user selected for implementation
+4. List all selected improvements with their status:
 
 ```markdown
 ## Claudecodefy — Implementation Plan
@@ -108,6 +115,11 @@ After all changes are applied:
 ### Remaining / Manual Follow-up
 - [Anything that couldn't be automated or needs user attention]
 ```
+
+After presenting the summary, clean up the assess results file:
+- Delete `.what-would-cc-do/assess-results.json`
+- If `.what-would-cc-do/` is now empty, remove the directory
+- If the file didn't exist (fallback mode was used), skip cleanup
 
 ---
 

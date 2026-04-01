@@ -1,6 +1,6 @@
 ---
 description: Analyze your codebase/work against Claude Code's documented LLM engineering patterns
-allowed-tools: Read, Glob, Grep, Bash, Agent, AskUserQuestion
+allowed-tools: Read, Write, Glob, Grep, Bash, Agent, AskUserQuestion
 argument-hint: [describe what you're working on or which aspect to assess]
 ---
 
@@ -133,6 +133,47 @@ Present findings in this format:
 
 ---
 
+## Phase 4.5: Persist Results
+
+After presenting the assessment output, save it as a JSON file so that `:claudecodefy` can reliably access the results even if the conversation is compressed.
+
+1. Create the directory `.what-would-cc-do/` in the user's project root if it doesn't exist
+2. Write `.what-would-cc-do/assess-results.json` with this schema:
+
+```json
+{
+  "timestamp": "<ISO-8601>",
+  "context": "<1-2 sentence summary of what was assessed>",
+  "strengths": [
+    { "pattern": "<name>", "cc_reference": "claude_code_XX", "note": "<brief alignment note>" }
+  ],
+  "gaps": [
+    {
+      "id": 1,
+      "title": "<gap title>",
+      "category": "<category>",
+      "cc_reference": "claude_code_XX",
+      "cc_section": "<section name>",
+      "cc_approach": "<what CC does>",
+      "current_approach": "<what user does>",
+      "the_gap": "<specific difference>",
+      "pros": ["<pro 1>", "<pro 2>"],
+      "cons": [{ "cost": "<cost>", "mitigation": "<mitigation>" }],
+      "effort": "trivial|moderate|significant",
+      "impact": "high|medium|low",
+      "selected": false
+    }
+  ],
+  "not_applicable": [
+    { "pattern": "<name>", "reason": "<why not applicable>" }
+  ]
+}
+```
+
+3. Inform the user: "Assessment saved to `.what-would-cc-do/assess-results.json`. Consider adding `.what-would-cc-do/` to your `.gitignore`."
+
+---
+
 ## Phase 5: Prioritization & Questions
 
 After presenting the assessment, ask the user which improvements to pursue using AskUserQuestion:
@@ -144,6 +185,10 @@ Options:
 - **"None — just wanted the assessment"** — informational only
 
 For each selected gap, if the gap requires design decisions the user should make (e.g., "which retry strategy to use", "how many agents to spawn"), ask a follow-up question with concrete options. Each question should have 2-4 predefined options reflecting different valid approaches, plus the ability for custom input.
+
+After the user makes their selection, update `.what-would-cc-do/assess-results.json`:
+- Set `selected: true` for each chosen gap
+- Re-write the file with the updated selections
 
 The user's selections will be used by the `:claudecodefy` command to apply changes.
 

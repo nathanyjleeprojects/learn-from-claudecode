@@ -58,9 +58,21 @@ If the index doesn't clearly point to the right files, use this mapping:
 | Plugins / Skills | 21, 12 | 22 |
 | Testing / Evaluation | 24, 18 | 25 |
 
-### Step 4: Read and Extract
+### Step 4: Section-Level Retrieval
 
-Read only the selected 2-4 files. Extract sections relevant to the query. **Do NOT return full file contents** — summarize.
+Do NOT read entire files. Use a two-pass approach to load only the relevant sections:
+
+**Step 4a: Scan Headings**
+For each selected file, run Grep with pattern `^##+ ` to extract all headings with line numbers. Review the heading list and identify which sections are relevant to the query.
+
+**Step 4b: Targeted Read**
+For each relevant heading identified in 4a:
+- Use Read with `offset` (heading line number) and `limit` (lines until the next same-level or higher-level heading, or ~80 lines max) to read only that section
+- Do NOT read the entire file
+
+**Fallback**: If Step 4a returns fewer than 2 relevant headings for a file, read the full file as before. This ensures coverage when headings don't clearly signal relevance.
+
+Extract and **summarize** the content from retrieved sections. Do NOT return raw file contents.
 
 ### Step 5: Output Format
 
@@ -94,6 +106,6 @@ Read only the selected 2-4 files. Extract sections relevant to the query. **Do N
 - **Maximum 5 patterns** in the summary
 - **Never return raw file contents** — always summarize and extract
 - **Note KB gaps** honestly when coverage is insufficient
-- **Read only what's needed** — do not load all 27 files
+- **Read only what's needed** — do not load all 27 files, and within each file, read only the relevant sections via heading-based Grep + targeted Read
 - **Be specific** — cite file numbers and section names so the main agent can reference them
 - **Preserve nuance** — if the KB presents trade-offs or caveats, include them
