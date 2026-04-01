@@ -1,7 +1,7 @@
 ---
 name: kb-reader
 description: Read and summarize relevant Claude Code engineering pattern files from the local knowledge base. Keeps raw file contents out of the main conversation context.
-model: inherit
+model: sonnet
 color: green
 tools: ["Read", "Glob", "Grep"]
 ---

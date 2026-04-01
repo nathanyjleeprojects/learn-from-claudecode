@@ -176,12 +176,23 @@ After presenting the assessment output, save it as a JSON file so that `:claudec
 
 ## Phase 5: Prioritization & Questions
 
-After presenting the assessment, ask the user which improvements to pursue using AskUserQuestion:
+After presenting the assessment, present all gaps as a checkbox list so the user can see and select individual items:
+
+```markdown
+### Select Gaps to Pursue
+
+- [ ] **Gap 1**: [Title] — Effort: [effort] | Impact: [impact]
+- [ ] **Gap 2**: [Title] — Effort: [effort] | Impact: [impact]
+- [ ] **Gap 3**: [Title] — Effort: [effort] | Impact: [impact]
+...
+```
+
+Then ask the user which to pursue using AskUserQuestion:
 
 Options:
-- **"All recommended gaps"** — apply all N identified gaps
-- **"High-impact only"** — only gaps marked as high impact
-- **"Let me pick specific ones"** — user will specify which gap numbers
+- **"All gaps"** — select all checkboxes
+- **"High-impact only"** — select only gaps marked as high impact
+- **"Specific gaps: [numbers]"** — e.g., "Specific gaps: 1, 3, 5"
 - **"None — just wanted the assessment"** — informational only
 
 For each selected gap, if the gap requires design decisions the user should make (e.g., "which retry strategy to use", "how many agents to spawn"), ask a follow-up question with concrete options. Each question should have 2-4 predefined options reflecting different valid approaches, plus the ability for custom input.

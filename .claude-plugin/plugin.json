@@ -1,5 +1,5 @@
 {
   "name": "what-would-cc-do",
   "description": "Analyze your codebase against Claude Code's production-grade LLM engineering patterns. Covers architecture, prompt engineering, tool design, resilience, security, multi-agent orchestration, and more.",
-  "version": "1.1.0"
+  "version": "1.1.1"
 }
