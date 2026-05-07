@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/nathanyjleeprojects-learn-from-claudecode-badge.png)](https://mseep.ai/app/nathanyjleeprojects-learn-from-claudecode)
+
 # Learn from Claude Code
 
 > Deep analysis of Anthropic's **Claude Code** CLI source (~1,900 TS files, 512K+ lines), extracting production-grade LLM engineering patterns across 26 in-depth articles.
